@@ -8,4 +8,5 @@ For now, only Ubuntu is supported.
 - Add support for more platforms (maybe via some config file);
 - Better documentation;
 - Tests;
-- Linting.
+- Linting;
+- Make it bash-compatible (PROMPT_COMMAND).
