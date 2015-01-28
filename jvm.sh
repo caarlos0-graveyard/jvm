@@ -11,7 +11,6 @@ _set-java-path() {
 }
 
 _discover-and-set() {
-  set -x
   if [ -f pom.xml ]; then
     local version="$(\
       grep '<java.version>' pom.xml | \
