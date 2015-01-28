@@ -1,17 +1,11 @@
 #!/bin/sh
-OSX_JDKS="/Library/Java/JavaVirtualMachines/"
 
 _set-java-path() {
   local version="$1"
   if [ -d "/usr/lib/jvm/java-${version}-oracle/" ]; then
     export JAVA_HOME="/usr/lib/jvm/java-${version}-oracle/"
-  elif [ -d "$OSX_JDKS" ]; then
-    # shellcheck disable=SC2010
-    local latest="$(ls -t1 "$OSX_JDKS" | grep "1.$version" | head -1)"
-    if [ ! -z "$latest" ]; then
-      echo "${OSX_JDKS}${latest}Contents/Home"
-      export JAVA_HOME="${OSX_JDKS}${latest}Contents/Home"
-    fi
+  elif [ -e /usr/libexec/java_home ]; then
+    export JAVA_HOME="$(/usr/libexec/java_home -v 1."$version")"
   fi
   export PATH="${JAVA_HOME}/bin:$PATH"
 }
