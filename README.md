@@ -3,6 +3,7 @@
 > The _"Java Version Manager"_
 
 Automatically change `JAVA_HOME` based on current directory `pom.xml`
+or `.java-version` files.
 
 For now, only Ubuntu and OSX are supported.
 
