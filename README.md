@@ -36,3 +36,5 @@ echo 7 >> .java-version
 - Add support for more platforms (maybe via some config file);
 - Better documentation;
 - Tests;
+- Replace JAVA_HOME in PATH instead of replacing it;
+- Set JAVA_HOME only when changed;
