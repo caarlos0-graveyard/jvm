@@ -11,3 +11,4 @@ For now, only Ubuntu and OSX are supported.
 - Add support for more platforms (maybe via some config file);
 - Better documentation;
 - Tests;
+- Maybe use update-java-alternatives on ubuntu and /usr/libexec/java_home on mac

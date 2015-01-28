@@ -9,6 +9,7 @@ _set-java-path() {
     # shellcheck disable=SC2010
     local latest="$(ls -t1 "$OSX_JDKS" | grep "1.$version" | head -1)"
     if [ ! -z "$latest" ]; then
+      echo "${OSX_JDKS}${latest}Contents/Home"
       export JAVA_HOME="${OSX_JDKS}${latest}Contents/Home"
     fi
   fi
