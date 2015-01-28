@@ -4,11 +4,10 @@
 
 Automatically change `JAVA_HOME` based on current directory `pom.xml`
 
-For now, only Ubuntu is supported.
+For now, only Ubuntu and OSX are supported.
 
 ### TODO
 
 - Add support for more platforms (maybe via some config file);
 - Better documentation;
 - Tests;
-- Make it bash-compatible (PROMPT_COMMAND).
