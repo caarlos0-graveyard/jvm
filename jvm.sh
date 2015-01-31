@@ -2,14 +2,17 @@
 
 _set-java-path() {
   local version="$1"
-  local previous="$JAVA_HOME"
+  local previous_java_home="$JAVA_HOME"
   if [ -d "/usr/lib/jvm/java-${version}-oracle/" ]; then
-    export JAVA_HOME="/usr/lib/jvm/java-${version}-oracle/"
+    local new_java_home="/usr/lib/jvm/java-${version}-oracle/"
   elif [ -e /usr/libexec/java_home ]; then
-    export JAVA_HOME="$(/usr/libexec/java_home -v 1."$version")"
+    local new_java_home="$(/usr/libexec/java_home -v 1."$version")"
   fi
-  export PATH="$(echo "$PATH" | sed -e 's|'"$previous"'/bin:||g')"
-  export PATH="${JAVA_HOME}/bin:$PATH"
+  if [ "$previous_java_home" != "$new_java_home" ]; then
+    export JAVA_HOME="$new_java_home"
+    export PATH="$(echo "$PATH" | sed -e 's|'"$previous_java_home"'/bin:||g')"
+    export PATH="${JAVA_HOME}/bin:$PATH"
+  fi
 }
 
 _discover-and-set() {
