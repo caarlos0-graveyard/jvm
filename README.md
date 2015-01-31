@@ -5,7 +5,11 @@
 Automatically change `JAVA_HOME` based on current directory `pom.xml`
 or `.java-version` files.
 
-For now, only Ubuntu and OSX are supported.
+The philosophy behind this project is to simplify and automatize the `JAVA_HOME`
+changing, much like `rbenv` and `rvm` do for Ruby.
+
+It's pretty common to have to work in Java 6, 7 and 8 projects, and changing
+`PATH`s and `JAVA_HOME`s by hand is annoying.
 
 ### Usage
 
@@ -30,3 +34,16 @@ you can also do this:
 echo 7 >> .java-version
 ```
 
+On OSX, jvm will use the `java_home` tool to find the available versions. For
+Ubuntu, right now jvm has `/usr/lib/jvm/java-${version}-oracle/` hard coded.
+This might change soon.
+
+### Antigen
+
+For those using Antigen, just hit
+
+```sh
+antigen bundle caarlos0/jvm
+```
+
+And it should all work out of the box.
