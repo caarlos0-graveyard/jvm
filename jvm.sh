@@ -2,11 +2,13 @@
 
 _set-java-path() {
   local version="$1"
+  local previous="$JAVA_HOME"
   if [ -d "/usr/lib/jvm/java-${version}-oracle/" ]; then
     export JAVA_HOME="/usr/lib/jvm/java-${version}-oracle/"
   elif [ -e /usr/libexec/java_home ]; then
     export JAVA_HOME="$(/usr/libexec/java_home -v 1."$version")"
   fi
+  export PATH="$(echo "$PATH" | sed -e 's|'"$previous"'/bin:||g')"
   export PATH="${JAVA_HOME}/bin:$PATH"
 }
 
