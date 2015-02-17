@@ -1,6 +1,6 @@
 #!/bin/sh
 
-_set-java-path() {
+_jvm_set-java-path() {
   local version="$1"
   local previous_java_home="$JAVA_HOME"
   if [ -d "/usr/lib/jvm/java-${version}-oracle/" ]; then
@@ -15,7 +15,7 @@ _set-java-path() {
   fi
 }
 
-_discover-and-set() {
+_jvm-discover-and-set() {
   if [ -f pom.xml ]; then
     local version="$(\
       grep '<java.version>' pom.xml | \
@@ -25,13 +25,13 @@ _discover-and-set() {
   if [ -z "$version" ] && [ -f .java-version ]; then
     local version="$(cat .java-version)"
   fi
-  _set-java-path "$version"
+  _jvm_set-java-path "$version"
 }
 
 if [ ! -z "$BASH"  ]; then
-  PROMPT_COMMAND=_discover-and-set
+  PROMPT_COMMAND=_jvm-discover-and-set
 elif [ ! -z "$ZSH_NAME" ]; then
   chpwd() {
-    _discover-and-set
+    _jvm-discover-and-set
   }
 fi
