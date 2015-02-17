@@ -8,11 +8,12 @@ _jvm_set-java-path() {
   elif [ -e /usr/libexec/java_home ]; then
     local new_java_home="$(/usr/libexec/java_home -v 1."$version")"
   fi
-  if [ "$previous_java_home" != "$new_java_home" ]; then
-    export JAVA_HOME="$new_java_home"
+  if [ "$previous_java_home" != "" ] &&
+    [ "$previous_java_home" != "$new_java_home" ]; then
     export PATH="$(echo "$PATH" | sed -e 's|'"$previous_java_home"'/bin:||g')"
-    export PATH="${JAVA_HOME}/bin:$PATH"
   fi
+  export JAVA_HOME="$new_java_home"
+  export PATH="${JAVA_HOME}/bin:$PATH"
 }
 
 _jvm-discover-and-set() {
