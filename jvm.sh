@@ -37,8 +37,11 @@ jvm() {
     local)
       echo "$@" > .java-version
       ;;
+    global)
+        echo "$@" > ~/.java-version
+        ;;
     *)
-      echo "Usage: jvm (local) <args>"
+      echo "Usage: jvm (local|global) <args>"
       return 0
       ;;
   esac
