@@ -16,7 +16,7 @@ _jvm_set-java-path() {
   export PATH="${JAVA_HOME}/bin:$PATH"
 }
 
-_jvm-discover-and-set() {
+_jvm-find-version() {
   if [ -f pom.xml ]; then
     local version="$(\
       grep '<java.version>' pom.xml | \
@@ -29,6 +29,11 @@ _jvm-discover-and-set() {
   if [ -z "$version" ] && [ -f ~/.java-version ]; then
     local version="$(cat ~/.java-version)"
   fi
+  echo "$version"
+}
+
+_jvm-discover-and-set() {
+  local version="$(_jvm-find-version)"
   [ ! -z "$version" ] && _jvm_set-java-path "$version"
 }
 
@@ -45,8 +50,11 @@ jvm() {
       echo "$@" > ~/.java-version
       _jvm-discover-and-set
       ;;
+    version)
+      _jvm-find-version
+      ;;
     *)
-      echo "Usage: jvm (local|global) <args>"
+      echo "Usage: jvm (local|global|version) <args>"
       return 0
       ;;
   esac
