@@ -26,6 +26,9 @@ _jvm-discover-and-set() {
   if [ -z "$version" ] && [ -f .java-version ]; then
     local version="$(cat .java-version)"
   fi
+  if [ -z "$version" ] && [ -f ~/.java-version ]; then
+    local version="$(cat ~/.java-version)"
+  fi
   [ ! -z "$version" ] && _jvm_set-java-path "$version"
 }
 
@@ -36,9 +39,14 @@ jvm() {
   case "$command" in
     local)
       echo "$@" > .java-version
+      _jvm-discover-and-set
+      ;;
+    global)
+      echo "$@" > ~/.java-version
+      _jvm-discover-and-set
       ;;
     *)
-      echo "Usage: jvm (local) <args>"
+      echo "Usage: jvm (local|global) <args>"
       return 0
       ;;
   esac
