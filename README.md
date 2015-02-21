@@ -31,7 +31,7 @@ If you don't have and don't want to have this in your project's pom,
 you can also do this:
 
 ```sh
-echo 7 > .java-version
+jvm local 7
 ```
 
 On OSX, jvm will use the `java_home` tool to find the available versions. For
