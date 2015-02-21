@@ -39,10 +39,12 @@ jvm() {
   case "$command" in
     local)
       echo "$@" > .java-version
+      _jvm-discover-and-set
       ;;
     global)
-        echo "$@" > ~/.java-version
-        ;;
+      echo "$@" > ~/.java-version
+      _jvm-discover-and-set
+      ;;
     *)
       echo "Usage: jvm (local|global) <args>"
       return 0
