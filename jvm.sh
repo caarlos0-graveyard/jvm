@@ -26,6 +26,9 @@ _jvm-discover-and-set() {
   if [ -z "$version" ] && [ -f .java-version ]; then
     local version="$(cat .java-version)"
   fi
+  if [ -z "$version" ] && [ -f ~/.java-version ]; then
+    local version="$(cat ~/.java-version)"
+  fi
   [ ! -z "$version" ] && _jvm_set-java-path "$version"
 }
 
