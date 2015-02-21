@@ -1,5 +1,4 @@
 #!/bin/sh
-
 _jvm_set-java-path() {
   local version="$1"
   local previous_java_home="$JAVA_HOME"
@@ -62,7 +61,6 @@ jvm() {
       ;;
   esac
 }
-
 
 main() {
   _jvm-discover-and-set-version
