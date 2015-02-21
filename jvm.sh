@@ -16,7 +16,7 @@ _jvm_set-java-path() {
   export PATH="${JAVA_HOME}/bin:$PATH"
 }
 
-_jvm-find-version() {
+_jvm-discover-version() {
   if [ -f pom.xml ]; then
     local version="$(\
       grep '<java.version>' pom.xml | \
@@ -32,8 +32,8 @@ _jvm-find-version() {
   echo "$version"
 }
 
-_jvm-discover-and-set() {
-  local version="$(_jvm-find-version)"
+_jvm-discover-and-set-version() {
+  local version="$(_jvm-discover-version)"
   [ ! -z "$version" ] && _jvm_set-java-path "$version"
 }
 
@@ -44,26 +44,29 @@ jvm() {
   case "$command" in
     local)
       echo "$@" > .java-version
-      _jvm-discover-and-set
+      _jvm-discover-and-set-version
       ;;
     global)
       echo "$@" > ~/.java-version
-      _jvm-discover-and-set
+      _jvm-discover-and-set-version
       ;;
     version)
-      _jvm-find-version
+      _jvm-discover-version
+      ;;
+    reload)
+      _jvm-discover-and-set-version
       ;;
     *)
-      echo "Usage: jvm (local|global|version) <args>"
+      echo "Usage: jvm (local|global|version|reload) <args>"
       return 0
       ;;
   esac
 }
 
 if [ ! -z "$BASH"  ]; then
-  PROMPT_COMMAND=_jvm-discover-and-set
+  PROMPT_COMMAND=_jvm-discover-and-set-version
 elif [ ! -z "$ZSH_NAME" ]; then
   chpwd() {
-    _jvm-discover-and-set
+    _jvm-discover-and-set-version
   }
 fi
