@@ -1,4 +1,4 @@
-# jvm  [![Build Status](https://travis-ci.org/caarlos0/jvm.svg?branch=master)](https://travis-ci.org/caarlos0/jvm) [![Stories in Ready](https://badge.waffle.io/caarlos0/jvm.png?label=ready&title=Ready)](https://waffle.io/caarlos0/jvm)
+# jvm  [![DevOps By Rultor.com](http://www.rultor.com/b/caarlos0/jvm)](http://www.rultor.com/p/caarlos0/jvm) [![Build Status](https://travis-ci.org/caarlos0/jvm.svg?branch=master)](https://travis-ci.org/caarlos0/jvm) [![Stories in Ready](https://badge.waffle.io/caarlos0/jvm.png?label=ready&title=Ready)](https://waffle.io/caarlos0/jvm)
 
 > The _"Java Version Manager"_
 
@@ -24,7 +24,7 @@ echo "source ~/.jvm/jvm.sh" >> .zshrc
 ```
 
 Then, just `cd` to a java project folder. If the `pom.xml`  has a
-`<java.version>1.7</java.version>`, for example, jvm will try to
+`<java.version>1.7</java.version>`, for example, `jvm` will try to
 set JDK7 to your PATH.
 
 If you don't have and don't want to have this in your project's pom,
@@ -34,9 +34,20 @@ you can also do this:
 jvm local 7
 ```
 
-On OSX, jvm will use the `java_home` tool to find the available versions. For
-Ubuntu, right now jvm has `/usr/lib/jvm/java-${version}-oracle/` hard coded.
+On OSX, `jvm` will use the `java_home` tool to find the available versions. For
+Ubuntu, right now `jvm` has `/usr/lib/jvm/java-${version}-oracle/` hard coded.
 This might change soon.
+
+### `jvm` commands
+
+Right now, `jvm` has the following commands:
+
+- `local VERSION`: creates a `.java-version` in the current dir with the given
+version;
+- `global VERSION`: creates a `.java-version` in your `$HOME` dir with the given
+version;
+- `version`: shows current version;
+- `help`: shows the help.
 
 ### Antigen
 
