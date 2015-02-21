@@ -1,4 +1,4 @@
-# jvm  [![Build Status](https://travis-ci.org/caarlos0/jvm.svg?branch=master)](https://travis-ci.org/caarlos0/jvm) [![Stories in Ready](https://badge.waffle.io/caarlos0/jvm.png?label=ready&title=Ready)](https://waffle.io/caarlos0/jvm) [![DevOps By Rultor.com](http://www.rultor.com/b/caarlos0/jvm)](http://www.rultor.com/p/caarlos0/jvm)
+# jvm  [![DevOps By Rultor.com](http://www.rultor.com/b/caarlos0/jvm)](http://www.rultor.com/p/caarlos0/jvm) [![Build Status](https://travis-ci.org/caarlos0/jvm.svg?branch=master)](https://travis-ci.org/caarlos0/jvm) [![Stories in Ready](https://badge.waffle.io/caarlos0/jvm.png?label=ready&title=Ready)](https://waffle.io/caarlos0/jvm)
 
 > The _"Java Version Manager"_
 
