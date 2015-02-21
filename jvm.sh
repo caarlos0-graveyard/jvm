@@ -63,10 +63,16 @@ jvm() {
   esac
 }
 
-if [ ! -z "$BASH"  ]; then
-  PROMPT_COMMAND=_jvm-discover-and-set-version
-elif [ ! -z "$ZSH_NAME" ]; then
-  chpwd() {
-    _jvm-discover-and-set-version
-  }
-fi
+
+main() {
+  _jvm-discover-and-set-version
+  if [ ! -z "$BASH"  ]; then
+    PROMPT_COMMAND=_jvm-discover-and-set-version
+  elif [ ! -z "$ZSH_NAME" ]; then
+    chpwd() {
+      _jvm-discover-and-set-version
+    }
+  fi
+}
+
+main
