@@ -29,6 +29,21 @@ _jvm-discover-and-set() {
   [ ! -z "$version" ] && _jvm_set-java-path "$version"
 }
 
+jvm() {
+  if [ "$#" != 0 ]; then
+    local command="$1"; shift
+  fi
+  case "$command" in
+    local)
+      echo "$@" > .java-version
+      ;;
+    *)
+      echo "Usage: jvm (local) <args>"
+      return 0
+      ;;
+  esac
+}
+
 if [ ! -z "$BASH"  ]; then
   PROMPT_COMMAND=_jvm-discover-and-set
 elif [ ! -z "$ZSH_NAME" ]; then
