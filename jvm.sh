@@ -2,7 +2,9 @@
 _jvm_set-java-path() {
   local version="$1"
   local previous_java_home="$JAVA_HOME"
-  if [ -d "/usr/lib/jvm/java-${version}-oracle/" ]; then
+  if [ -f ~/.jvmconfig ]; then
+    local new_java_home="$(grep "${version}"= ~/.jvmconfig | cut -f2 -d'=')"
+  elif [ -d "/usr/lib/jvm/java-${version}-oracle/" ]; then
     local new_java_home="/usr/lib/jvm/java-${version}-oracle/"
   elif [ -e /usr/libexec/java_home ]; then
     local new_java_home="$(/usr/libexec/java_home -v 1."$version")"
@@ -36,6 +38,16 @@ _jvm-discover-and-set-version() {
   [ ! -z "$version" ] && _jvm_set-java-path "$version"
 }
 
+_jvm-edit-config() {
+  if [ ! -f ~/.jvmconfig ]; then
+    cat > ~/.jvmconfig <<EOF
+7=Path to jdk 7
+8=Path to jdk 8
+EOF
+  fi
+  $EDITOR ~/.jvmconfig
+}
+
 jvm() {
   if [ "$#" != 0 ]; then
     local command="$1"; shift
@@ -55,8 +67,11 @@ jvm() {
     reload)
       _jvm-discover-and-set-version
       ;;
+    config)
+      _jvm-edit-config
+      ;;
     *)
-      echo "Usage: jvm (local|global|version|reload) <args>"
+      echo "Usage: jvm (local|global|version|reload|config) <args>"
       return 0
       ;;
   esac

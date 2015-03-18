@@ -36,7 +36,14 @@ jvm local 7
 
 On OSX, `jvm` will use the `java_home` tool to find the available versions. For
 Ubuntu, right now `jvm` has `/usr/lib/jvm/java-${version}-oracle/` hard coded.
-This might change soon.
+This might change soon. If you need custom versions, like `6-openjdk`, for
+example, you can run `jvm config` and add a line like this:
+
+```
+6-openjdk=/path/to/openjdk/6
+```
+
+And `jvm` will automagically works.
 
 ### `jvm` commands
 
@@ -46,6 +53,8 @@ Right now, `jvm` has the following commands:
 version;
 - `global VERSION`: creates a `.java-version` in your `$HOME` dir with the given
 version;
+- `jvm config`: opens the `~/.jvmconfig` file in your default `$EDITOR`. Useful
+for defining custom version and/or paths;
 - `version`: shows current version;
 - `help`: shows the help.
 
