@@ -81,6 +81,7 @@ main() {
   _jvm-discover-and-set-version
   if [ ! -z "$BASH"  ]; then
     PROMPT_COMMAND=_jvm-discover-and-set-version
+    complete -W "local global version reload config" jvm
   elif [ ! -z "$ZSH_NAME" ]; then
     chpwd() {
       _jvm-discover-and-set-version
