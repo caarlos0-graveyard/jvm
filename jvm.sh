@@ -48,6 +48,10 @@ EOF
   $EDITOR ~/.jvmconfig
 }
 
+_jvm-command-list() {
+  echo "local global version reload config"
+}
+
 jvm() {
   if [ "$#" != 0 ]; then
     local command="$1"; shift
@@ -71,7 +75,7 @@ jvm() {
       _jvm-edit-config
       ;;
     *)
-      echo "Usage: jvm (local|global|version|reload|config) <args>"
+      echo "Usage: jvm (${$(_jvm-command-list)// /|}) <args>"
       return 0
       ;;
   esac
@@ -81,11 +85,16 @@ main() {
   _jvm-discover-and-set-version
   if [ ! -z "$BASH"  ]; then
     PROMPT_COMMAND=_jvm-discover-and-set-version
-    complete -W "local global version reload config" jvm
+    complete -W "$(_jvm-command-list)" jvm
   elif [ ! -z "$ZSH_NAME" ]; then
     chpwd() {
       _jvm-discover-and-set-version
     }
+    _jvm-completions() {
+      # shellcheck disable=SC2039
+      IFS=' ' read -A reply <<< "$(_jvm-command-list)"
+    }
+    compctl -K _jvm-completions jvm
   fi
 }
 
