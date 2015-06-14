@@ -1,4 +1,5 @@
 language: bash
+sudo: required
 install:
   - ./build/install.sh
 script:
