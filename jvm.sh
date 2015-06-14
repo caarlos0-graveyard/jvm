@@ -7,7 +7,7 @@ _jvm_set-java-path() {
   elif [ -d "/usr/lib/jvm/java-${version}-oracle/" ]; then
     local new_java_home="/usr/lib/jvm/java-${version}-oracle/"
   elif [ -e /usr/libexec/java_home ]; then
-    local new_java_home="$(/usr/libexec/java_home -v 1."$version")"
+    local new_java_home="$(/usr/libexec/java_home -v 1."$version" 2> /dev/null)"
   fi
   if [ "$previous_java_home" != "" ] &&
     [ "$previous_java_home" != "$new_java_home" ]; then
