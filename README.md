@@ -58,12 +58,16 @@ for defining custom version and/or paths;
 - `version`: shows current version;
 - `help`: shows the help.
 
-### Antigen
+### Antigen/Antibody
 
-For those using Antigen, just hit
+For those using Antigen/Antibody, just hit
 
 ```sh
-antigen bundle caarlos0/jvm
+# for antigen
+antigen  bundle caarlos0/jvm
+
+# for antibody
+antibody bundle caarlos0/jvm
 ```
 
 And it should all work out of the box.
