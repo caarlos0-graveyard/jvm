@@ -98,7 +98,7 @@ main() {
     }
     _jvm-completions() {
       # shellcheck disable=SC2039,SC2034
-      IFS=' ' read -A reply <<< "$(_jvm-command-list)"
+      IFS=' ' read -r -A reply <<< "$(_jvm-command-list)"
     }
     compctl -K _jvm-completions jvm
   fi
