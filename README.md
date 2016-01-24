@@ -1,4 +1,4 @@
-# jvm  [![DevOps By Rultor.com](http://www.rultor.com/b/caarlos0/jvm)](http://www.rultor.com/p/caarlos0/jvm) [![Build Status](https://travis-ci.org/caarlos0/jvm.svg?branch=master)](https://travis-ci.org/caarlos0/jvm) [![Stories in Ready](https://badge.waffle.io/caarlos0/jvm.png?label=ready&title=Ready)](https://waffle.io/caarlos0/jvm)
+# jvm [![Build Status](https://travis-ci.org/caarlos0/jvm.svg?branch=master)](https://travis-ci.org/caarlos0/jvm)
 
 > The _"Java Version Manager"_
 
@@ -14,13 +14,13 @@ It's pretty common to have to work in Java 6, 7 and 8 projects, and changing
 ### Usage
 
 ```sh
-git clone https://github.com/caarlos0/jvm.git ~/.jvm
+$ git clone https://github.com/caarlos0/jvm.git ~/.jvm
 
 # for bash
-echo "source ~/.jvm/jvm.sh" >> .bashrc
+$ echo "source ~/.jvm/jvm.sh" >> .bashrc
 
 # for zsh
-echo "source ~/.jvm/jvm.sh" >> .zshrc
+$ echo "source ~/.jvm/jvm.sh" >> .zshrc
 ```
 
 Then, just `cd` to a java project folder. If the `pom.xml`  has a
@@ -31,7 +31,7 @@ If you don't have and don't want to have this in your project's pom,
 you can also do this:
 
 ```sh
-jvm local 7
+$ jvm local 7
 ```
 
 On OSX, `jvm` will use the `java_home` tool to find the available versions. For
@@ -54,7 +54,7 @@ version;
 - `global VERSION`: creates a `.java-version` in your `$HOME` dir with the given
 version;
 - `jvm config`: opens the `~/.jvmconfig` file in your default `$EDITOR`. Useful
-for defining custom version and/or paths;
+for defining custom versions and/or paths;
 - `version`: shows current version;
 - `help`: shows the help.
 
@@ -64,10 +64,10 @@ For those using Antigen/Antibody, just hit
 
 ```sh
 # for antigen
-antigen  bundle caarlos0/jvm
+$ antigen  bundle caarlos0/jvm
 
 # for antibody
-antibody bundle caarlos0/jvm
+$ antibody bundle caarlos0/jvm
 ```
 
 And it should all work out of the box.
