@@ -4,11 +4,10 @@ install:
 script:
   - ./build/build.sh
   - source jvm.sh
-  - jvm local 8
+  - jvm local 7
   - jvm reload
   - jvm version
   - java -version
-  - /usr/libexec/java_home -V || true
 notifications:
   email: false
 sudo: required
