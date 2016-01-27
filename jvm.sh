@@ -9,9 +9,9 @@ _jvm_set-java-path() {
   elif [ -d "/usr/lib/jvm/java-${version}-oracle/" ]; then
     new_java_home="/usr/lib/jvm/java-${version}-oracle/"
   elif [ -e /usr/libexec/java_home ]; then
-    new_java_home="$(/usr/libexec/java_home -v 1."$version" 2> /dev/null)"
+    new_java_home="$(/usr/libexec/java_home -v 1."$version" || true)"
   fi
-  if [ "$new_java_home" != "" ]; then
+  if [ "$new_java_home" != "" ] && [ -d "$new_java_home" ]; then
     if [ "$previous_java_home" != "" ] && [ "$previous_java_home" != "$new_java_home" ]; then
       # shellcheck disable=SC2155
       export PATH="$(echo "$PATH" | sed -e 's|'"$previous_java_home"'/bin:||g')"
