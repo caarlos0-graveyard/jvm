@@ -5,6 +5,7 @@ script:
   - ./build/build.sh
   - source jvm.sh
   - jvm local 8
+  - [ $(jvm version) -eq 8 ] || exit 1
   - jvm reload
 notifications:
   email: false

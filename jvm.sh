@@ -1,18 +1,18 @@
 #!/bin/sh
+# shellcheck disable=SC2039
 _jvm_set-java-path() {
-  local version="$1"
-  local previous_java_home="$JAVA_HOME"
-  local new_java_home
+  version="$1"
+  previous_java_home="$JAVA_HOME"
+  new_java_home=""
   if [ -f ~/.jvmconfig ]; then
     new_java_home="$(grep "${version}"= ~/.jvmconfig | cut -f2 -d'=')"
   elif [ -d "/usr/lib/jvm/java-${version}-oracle/" ]; then
-    local new_java_home="/usr/lib/jvm/java-${version}-oracle/"
+    new_java_home="/usr/lib/jvm/java-${version}-oracle/"
   elif [ -e /usr/libexec/java_home ]; then
     new_java_home="$(/usr/libexec/java_home -v 1."$version" 2> /dev/null)"
   fi
   if [ "$previous_java_home" != "" ] &&
     [ "$previous_java_home" != "$new_java_home" ]; then
-    local new_path
     new_path="$(echo "$PATH" | sed -e 's|'"$previous_java_home"'/bin:||g')"
     export PATH="$new_path"
   fi
@@ -20,8 +20,9 @@ _jvm_set-java-path() {
   export PATH="${JAVA_HOME}/bin:$PATH"
 }
 
+# shellcheck disable=SC2039
 _jvm-discover-version() {
-  local version
+  version=""
   if [ -f pom.xml ]; then
     version="$(\
       grep '<java.version>' pom.xml | \
@@ -37,12 +38,13 @@ _jvm-discover-version() {
   echo "$version"
 }
 
+# shellcheck disable=SC2039
 _jvm-discover-and-set-version() {
-  local version
   version="$(_jvm-discover-version)"
   [ ! -z "$version" ] && _jvm_set-java-path "$version"
 }
 
+# shellcheck disable=SC2039
 _jvm-edit-config() {
   if [ ! -f ~/.jvmconfig ]; then
     cat > ~/.jvmconfig <<EOF
@@ -53,13 +55,15 @@ EOF
   $EDITOR ~/.jvmconfig
 }
 
+# shellcheck disable=SC2039
 _jvm-command-list() {
   echo "local global version reload config"
 }
 
 jvm() {
+  command=""
   if [ "$#" != 0 ]; then
-    local command="$1"; shift
+    command="$1"; shift
   fi
   case "$command" in
     local)
@@ -96,6 +100,7 @@ main() {
     chpwd() {
       _jvm-discover-and-set-version
     }
+    # shellcheck disable=SC2039
     _jvm-completions() {
       # shellcheck disable=SC2039,SC2034
       IFS=' ' read -r -A reply <<< "$(_jvm-command-list)"
