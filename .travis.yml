@@ -3,11 +3,7 @@ install:
   - ./build/install.sh
 script:
   - ./build/build.sh
-  - source jvm.sh
-  - jvm local 7
-  - jvm reload
-  - jvm version
-  - java -version
+  - ./tests/test.sh
 notifications:
   email: false
 sudo: required
