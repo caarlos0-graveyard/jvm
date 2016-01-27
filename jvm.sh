@@ -110,4 +110,4 @@ main() {
   fi
 }
 
-main || true
+main

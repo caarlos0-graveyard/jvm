@@ -1,5 +1,6 @@
 #!/bin/bash
 set -xeo pipefail
+echo 8 > .java-version
 # shellcheck disable=SC1091
 source jvm.sh
 jvm local 7
