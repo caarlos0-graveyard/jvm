@@ -1,8 +1,12 @@
 language: bash
-sudo: required
 install:
   - ./build/install.sh
 script:
   - ./build/build.sh
+  - ./tests/test.sh
 notifications:
   email: false
+sudo: required
+os:
+  - linux
+  - osx
