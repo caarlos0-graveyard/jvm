@@ -17,10 +17,10 @@ It's pretty common to have to work in Java 6, 7 and 8 projects, and changing
 $ git clone https://github.com/caarlos0/jvm.git ~/.jvm
 
 # for bash
-$ echo "source ~/.jvm/jvm.sh" >> .bashrc
+$ echo "source ~/.jvm/jvm.sh" >> ~/.bashrc
 
 # for zsh
-$ echo "source ~/.jvm/jvm.sh" >> .zshrc
+$ echo "source ~/.jvm/jvm.sh" >> ~/.zshrc
 ```
 
 Then, just `cd` to a java project folder. If the `pom.xml`  has a
