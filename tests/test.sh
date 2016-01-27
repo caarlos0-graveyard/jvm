@@ -8,4 +8,4 @@ jvm reload
 if ! [ "$(jvm version)" -eq 7 ]; then
   echo "jvm version should be 7"
 fi
-echo "$PATH" | grep 1.7
+echo "$JAVA_HOME" | grep 7
