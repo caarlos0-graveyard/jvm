@@ -1,5 +1,6 @@
 #!/bin/bash
 set -xeo pipefail
+# shellcheck disable=SC1091
 source jvm.sh
 jvm local 7
 jvm reload
