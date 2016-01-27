@@ -13,6 +13,7 @@ _jvm_set-java-path() {
   fi
   if [ "$new_java_home" != "" ]; then
     if [ "$previous_java_home" != "" ] && [ "$previous_java_home" != "$new_java_home" ]; then
+      # shellcheck disable=SC2155
       export PATH="$(echo "$PATH" | sed -e 's|'"$previous_java_home"'/bin:||g')"
     fi
     export JAVA_HOME="$new_java_home"
