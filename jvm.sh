@@ -11,13 +11,13 @@ _jvm_set-java-path() {
   elif [ -e /usr/libexec/java_home ]; then
     new_java_home="$(/usr/libexec/java_home -v 1."$version" 2> /dev/null)"
   fi
-  if [ "$previous_java_home" != "" ] &&
-    [ "$previous_java_home" != "$new_java_home" ]; then
-    new_path="$(echo "$PATH" | sed -e 's|'"$previous_java_home"'/bin:||g')"
-    export PATH="$new_path"
+  if [ "$new_java_home" != "" ]; then
+    if [ "$previous_java_home" != "" ] && [ "$previous_java_home" != "$new_java_home" ]; then
+      export PATH="$(echo "$PATH" | sed -e 's|'"$previous_java_home"'/bin:||g')"
+    fi
+    export JAVA_HOME="$new_java_home"
+    export PATH="${JAVA_HOME}/bin:$PATH"
   fi
-  export JAVA_HOME="$new_java_home"
-  export PATH="${JAVA_HOME}/bin:$PATH"
 }
 
 # shellcheck disable=SC2039
@@ -48,8 +48,8 @@ _jvm-discover-and-set-version() {
 _jvm-edit-config() {
   if [ ! -f ~/.jvmconfig ]; then
     cat > ~/.jvmconfig <<EOF
-custom-7=Path to jdk 7
-custom-8=Path to jdk 8
+custom-jdk-7=Path to custom jdk 7
+custom-jdk-8=Path to custom jdk 8
 EOF
   fi
   $EDITOR ~/.jvmconfig
@@ -109,4 +109,4 @@ main() {
   fi
 }
 
-main
+main || true
