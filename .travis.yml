@@ -1,8 +1,14 @@
 language: bash
-sudo: required
 install:
   - ./build/install.sh
 script:
   - ./build/build.sh
+  - source jvm.sh
+  - jvm local 8
+  - jvm reload
 notifications:
   email: false
+sudo: required
+os:
+  - linux
+  - osx
