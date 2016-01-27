@@ -48,8 +48,8 @@ _jvm-discover-and-set-version() {
 _jvm-edit-config() {
   if [ ! -f ~/.jvmconfig ]; then
     cat > ~/.jvmconfig <<EOF
-7=Path to jdk 7
-8=Path to jdk 8
+custom-7=Path to jdk 7
+custom-8=Path to jdk 8
 EOF
   fi
   $EDITOR ~/.jvmconfig

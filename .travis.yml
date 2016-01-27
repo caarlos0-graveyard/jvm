@@ -8,6 +8,7 @@ script:
   - jvm reload
   - jvm version
   - java -version
+  - /usr/libexec/java_home -V || true
 notifications:
   email: false
 sudo: required
