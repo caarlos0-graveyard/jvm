@@ -1,4 +1,5 @@
 #!/bin/bash
+set -xeo pipefail
 source jvm.sh
 jvm local 7
 jvm reload
