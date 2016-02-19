@@ -29,6 +29,12 @@ _jvm-discover-version() {
       grep '<java.version>' pom.xml | \
       sed 's/.*<java.version>1.\(.*\)<\/java.version>.*/\1/' \
     )"
+    if [ -z "$version" ]; then
+      version="$(\
+        grep '<maven.compiler.source>' pom.xml | \
+        sed 's/.*<maven.compiler.source>1.\(.*\)<\/maven.compiler.source>.*/\1/' \
+      )"
+    fi
   fi
   if [ -z "$version" ] && [ -f .java-version ]; then
     version="$(cat .java-version)"
