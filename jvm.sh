@@ -35,7 +35,8 @@ __jvm_set() {
 __jvm_set_pom_version() {
   MAVEN_OPTS="" mvn help:evaluate \
     -Dexpression='maven.compiler.source' |
-    grep -v INFO | grep -v WARN | cut -f2 -d'.' > .java-version
+    grep -e '^1\.[4-9]$' |
+    cut -f2 -d'.' > .java-version
 }
 
 # finds out which java version should be used.
