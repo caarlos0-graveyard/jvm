@@ -7,7 +7,7 @@ __jvm_set() {
 
   # custom jdk strategy
   test -f ~/.jvmconfig && \
-    new="$(grep "$version"= ~/.jvmconfig | cut -f2 -d'=')"
+    new="$(grep "$version"= ~/.jvmconfig || true | cut -f2 -d'=')"
 
   # ubuntu/debian jdk strategy
   test -z "$new" -a -d "/usr/lib/jvm/java-${version}-oracle/" && \
