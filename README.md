@@ -24,9 +24,11 @@ $ echo "source ~/.jvm/jvm.sh" >> ~/.bashrc
 $ echo "source ~/.jvm/jvm.sh" >> ~/.zshrc
 ```
 
-Then, just `cd` to a java project folder. `jvm` will call `mvn help:evaluate`
-asking for the source compiler version, and then, set it to `.java-version`.
-If the `.java-version` file already exists, it will just use what's in there.
+Then, just `cd` to a java project folder. `jvm` will try to extract the version
+using a regular expression. If that fails, `jvm` will then call
+`mvn help:evaluate` asking for the source compiler version, and then, set it to
+`.java-version`. If the `.java-version` file already exists, it will just use
+what's in there.
 
 You can always change the current folder java version by doing:
 
