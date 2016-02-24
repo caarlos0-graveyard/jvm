@@ -5,24 +5,24 @@ __jvm_set() {
   previous="$JAVA_HOME"
 
   # custom jdk strategy
-  test -f ~/.jvmconfig && \
+  test -f ~/.jvmconfig &&
     new="$(grep "$version"= ~/.jvmconfig || true | cut -f2 -d'=')"
 
   # ubuntu/debian jdk strategy
-  test -z "$new" -a -d "/usr/lib/jvm/java-${version}-oracle/" && \
+  test -z "$new" -a -d "/usr/lib/jvm/java-${version}-oracle/" &&
     new="/usr/lib/jvm/java-${version}-oracle/"
 
   # osx jdk strategy
-  test -z "$new" -a -e /usr/libexec/java_home && \
+  test -z "$new" -a -e /usr/libexec/java_home &&
     new="$(/usr/libexec/java_home -v 1."$version" || true)"
 
   # sanity check: new must be a folder.
-  test ! -z "$new" -a -d "$new" || return 1
+  test -n "$new" -a -d "$new" || return 1
 
   # PATH cleanup
   # shellcheck disable=SC2155
-  test ! -z "$previous" -a "$previous" != "$new" && \
-    export PATH="$(echo "$PATH" | sed -e 's|'"$previous"'/bin:||g')"
+  test -n "$previous" -a "$previous" != "$new" &&
+    export PATH="$(echo "$PATH" | sed -e "s|$previous/bin:||g")"
 
   # finally export new home and path
   export JAVA_HOME="$new"
@@ -52,27 +52,38 @@ __jvm_pomversion() {
   test -f pom.xml || return 1
   version="$(__jvm_pomversion_regex)"
   test -z "$version" && version="$(__jvm_pomversion_evaluate)"
-  test ! -z "$version" && echo "$version" > .java-version
+  test -n "$version" && echo "$version" > .java-version
+}
+
+# tries to get the version from the local .java-version
+__jvm_local_version() {
+  test -f .java-version || return 1
+  cat .java-version
+}
+
+# tries to get the version from the user .java-version
+__jvm_user_version() {
+  test -f ~/.java-version || return 1
+  cat ~/.java-version
 }
 
 # finds out which java version should be used.
 __jvm_version() {
   test ! -f .java-version && __jvm_pomversion
-  test -f .java-version && version="$(cat .java-version)"
-  test -z "$version" -a -f ~/.java-version && version="$(cat ~/.java-version)"
-  echo "$version"
+  __jvm_local_version || __jvm_user_version
 }
 
 # called when a dir changes. Find which java version to use and sets it to PATH.
 __jvm_main() {
   version="$(__jvm_version)"
-  test ! -z "$version" && __jvm_set "$version"
+  test -n "$version" && __jvm_set "$version"
 }
 
 # edit custom java version configurations
 __jvm_config() {
-  test ! -f ~/.jvmconfig && echo "custom-jdk=/path/to/custom/jdk" > ~/.jvmconfig
-  $EDITOR ~/.jvmconfig
+  file="$HOME/.jvmconfig"
+  test ! -f "$file" && echo "custom-jdk=/path/to/custom/jdk" > "$file"
+  $EDITOR "$file"
 }
 
 # shows usage instructions
@@ -82,7 +93,7 @@ NAME:
   jvm - The Java Version Manager
 
 USAGE:
-  jvm command [command options]
+  jvm command [command-options]
 
 AUTHOR(S):
   Carlos Alexandro Becker (caarlos0@gmail.com)
@@ -133,19 +144,16 @@ jvm() {
 
 # main function called when sourced.
 main() {
-  if [ ! -z "$BASH"  ]; then
+  if [ -n "$BASH"  ]; then
     PROMPT_COMMAND=__jvm_main
     # shellcheck disable=SC2039
     complete -W "local global version reload config" jvm
-  elif [ ! -z "$ZSH_NAME" ]; then
+  elif [ -n "$ZSH_NAME" ]; then
     chpwd() {
       __jvm_main
     }
-    _jvm() {
-      _arguments "1: :(local global version reload config)"
-    }
     # shellcheck disable=SC2039
-    compdef _jvm jvm
+    compctl -k "(local global version reload config)" jvm
   fi
 }
 
