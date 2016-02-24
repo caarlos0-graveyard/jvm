@@ -1,5 +1,5 @@
 #!/bin/bash
-set -eo pipefail
+set -xeo pipefail
 find . -name '.java-version' -delete
 
 ROOT="$(pwd)"
