@@ -2,7 +2,6 @@
 # find the appropriate JAVA_HOME for the given java version and fix PATH.
 __jvm_set() {
   version="$1"
-  new=""
   previous="$JAVA_HOME"
 
   # custom jdk strategy
@@ -30,19 +29,35 @@ __jvm_set() {
   export PATH="${JAVA_HOME}/bin:$PATH"
 }
 
-# evaluates the 'maven.compiler.source' expression, saving its results to
-# .java-version (for further faster loading).
-__jvm_set_pom_version() {
+# evaluates the 'maven.compiler.source' expression, returning the found java
+# version
+__jvm_pomversion_evaluate() {
   MAVEN_OPTS="" mvn help:evaluate \
     -Dexpression='maven.compiler.source' |
     grep -e '^1\.[4-9]$' |
-    cut -f2 -d'.' > .java-version
+    cut -f2 -d'.'
+}
+
+# tried to find the java version using regex.
+__jvm_pomversion_regex() {
+  grep -Eo '<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>' pom.xml |
+    cut -f2 -d'>' |
+    cut -f2 -d'.' |
+    cut -f1 -d'<'
+}
+
+# tries multiple strategies to find the java version, and then sets it in a
+# .java-version
+__jvm_pomversion() {
+  test -f pom.xml || return 1
+  version="$(__jvm_pomversion_regex)"
+  test -z "$version" && version="$(__jvm_pomversion_evaluate)"
+  test ! -z "$version" && echo "$version" > .java-version
 }
 
 # finds out which java version should be used.
 __jvm_version() {
-  version=""
-  test ! -f .java-version -a -f pom.xml && __jvm_set_pom_version
+  test ! -f .java-version && __jvm_pomversion
   test -f .java-version && version="$(cat .java-version)"
   test -z "$version" -a -f ~/.java-version && version="$(cat ~/.java-version)"
   echo "$version"
@@ -91,12 +106,12 @@ jvm() {
   fi
   case "$command" in
     local)
-      test -z "$@" && jvm help
+      test -z "$@" && __jvm_usage && return 1
       echo "$@" > .java-version
       __jvm_main
       ;;
     global)
-      test -z "$@" && jvm help
+      test -z "$@" && __jvm_usage && return 1
       echo "$@" > ~/.java-version
       __jvm_main
       ;;

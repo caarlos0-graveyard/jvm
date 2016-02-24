@@ -17,6 +17,12 @@ test_pom7() {
   assert_java 7
 }
 
+test_pom7_grep() {
+  cd "$ROOT/$TESTS"/grep
+  jvm reload
+  assert_java 7
+}
+
 test_pom8() {
   cd "$ROOT/$TESTS"/java8
   jvm reload
@@ -39,3 +45,6 @@ test "$TRAVIS_OS_NAME" != "osx" && test_pom8
 
 echo "cdwd java 7 pom"
 test_pom7
+
+echo "cdwd java 7 grep"
+test_pom7_grep
