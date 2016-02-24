@@ -1,0 +1,25 @@
+$ ROOT="$(pwd)"
+$ TESTS="tests"
+$ find . -name '.java-version' -delete
+$ source jvm.sh
+$ jvm global 8              # global
+$ jvm version
+8
+$ jvm local 7               # local
+$ jvm version
+7
+$ cd "$ROOT/$TESTS/java8"   # test pom 8
+$ jvm reload
+$ jvm version
+8
+$ cd "$ROOT/$TESTS/java7"   # test pom 7
+$ jvm reload
+$ jvm version
+7
+$ cd "$ROOT/$TESTS/grep"    # test pom 7 grep
+$ jvm reload
+$ jvm version
+7
+$ cd "$ROOT"
+$ find . -name '.java-version' -delete
+$
