@@ -1,7 +1,5 @@
 #!/bin/bash
-set -eo pipefail
-find . -name '.java-version' -delete
-
+set -xeo pipefail
 ROOT="$(pwd)"
 TESTS="$(dirname "${BASH_SOURCE[0]}")"
 
@@ -29,6 +27,8 @@ test_pom8() {
   assert_java 8
 }
 
+find . -name '.java-version' -delete
+
 # shellcheck disable=SC1091
 source jvm.sh
 
@@ -36,7 +36,7 @@ echo "jvm global 8"
 jvm global 8
 test "$TRAVIS_OS_NAME" != "osx" && assert_java 8
 
-echo "jvm global 7"
+echo "jvm local 7"
 jvm local 7
 assert_java 7
 
