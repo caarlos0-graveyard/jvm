@@ -48,7 +48,10 @@ __jvm_pomversion_evaluate() {
 
 # tried to find the java version using regex.
 __jvm_pomversion_regex() {
-  grep -Eo '<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>' pom.xml |
+  regex="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
+  version="$(grep -Eo "$regex" pom.xml)"
+  test -z "$version" && return 1
+  echo $version |
     cut -f2 -d'>' |
     cut -f2 -d'.' |
     cut -f1 -d'<'

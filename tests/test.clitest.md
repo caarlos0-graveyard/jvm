@@ -58,6 +58,17 @@ $ jvm version
 $ java -version #→ --egrep 1\.7
 ```
 
+Test help:evaluate
+
+```console
+$ cd "$ROOT/$TESTS/empty"
+$ jvm reload
+$ jvm version
+7
+$ java -version #→ --egrep 1\.7
+```
+
+
 Test custom java version
 
 ```console
