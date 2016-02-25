@@ -11,6 +11,7 @@ $ ROOT="$(pwd)"
 $ TESTS="tests"
 $ find . -name '.java-version' -delete
 $ source jvm.sh
+$ export MAVEN_OPTS=""
 $
 ```
 
