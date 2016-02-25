@@ -1,6 +1,10 @@
 # jvm test suite
 
-Initial setup
+This is the self-document test suite for JVM.
+
+# Initial setup
+
+Just cleanup, variable setting and source what needs to be sourced.
 
 ```console
 $ ROOT="$(pwd)"
@@ -10,7 +14,9 @@ $ source jvm.sh
 $
 ```
 
-Test global
+# jvm global
+
+Test setting a global version.
 
 ```console
 $ jvm global 8
@@ -19,7 +25,9 @@ $ jvm version
 $ java -version #→ --egrep 1\.8
 ```
 
-Test local
+# jvm local
+
+Test setting a version to the current folder.
 
 ```console
 $ jvm local 7
@@ -28,7 +36,9 @@ $ jvm version
 $ java -version #→ --egrep 1\.7
 ```
 
-Test POM 8
+# maven.compiler.source
+
+Test a pom with a `maven.compiler.source` property set to Java 8.
 
 ```console
 $ cd "$ROOT/$TESTS/java8"
@@ -38,7 +48,9 @@ $ jvm version
 $ java -version #→ --egrep 1\.8
 ```
 
-Test POM 7
+# java.version
+
+Test a pom with a `java.version` property set to Java 7.
 
 ```console
 $ cd "$ROOT/$TESTS/java7"
@@ -48,7 +60,10 @@ $ jvm version
 $ java -version #→ --egrep 1\.7
 ```
 
-Test POM 7 grep
+# maven-compiler-plugin
+
+Test reading the `source` tag from `maven-compiler-plugin`, which in this
+example is set to Java 7.
 
 ```console
 $ cd "$ROOT/$TESTS/grep"
@@ -58,18 +73,24 @@ $ jvm version
 $ java -version #→ --egrep 1\.7
 ```
 
-Test help:evaluate
+# parent pom
+
+Test a pom with no java config at all, the config is at its parent pom,
+therefore, this will run `mvn help:evaluate` and find out that the parent
+is using Java 8.
 
 ```console
 $ cd "$ROOT/$TESTS/empty"
 $ jvm reload
 $ jvm version
-7
-$ java -version #→ --egrep 1\.7
+8
+$ java -version #→ --egrep 1\.8
 ```
 
+# jvmconfig
 
-Test custom java version
+Test that `jvm` respects a custom java version in `~/.jvmconfig`, in this case,
+pointing out Java 6 to use Java 7 home.
 
 ```console
 $ cd "$ROOT/$TESTS/grep"
@@ -82,7 +103,9 @@ $ jvm version
 $ java -version #→ --egrep 1\.7
 ```
 
-Cleanup
+# Cleanup
+
+Remove unneeded files after all tests ran.
 
 ```console
 $ cd "$ROOT"

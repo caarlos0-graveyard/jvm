@@ -6,6 +6,6 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <properties>
-    <maven.compiler.source>1.7</maven.compiler.source>
+    <java.version>1.7</java.version>
   </properties>
 </project>
