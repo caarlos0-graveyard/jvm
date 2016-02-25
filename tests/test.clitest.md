@@ -20,9 +20,9 @@ $
 Test setting a global version.
 
 ```console
-$ jvm global 8
+$ jvm global 7
 $ jvm version
-8
+7
 $
 ```
 
