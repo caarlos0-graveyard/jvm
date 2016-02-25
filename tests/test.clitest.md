@@ -16,7 +16,7 @@ Test global
 $ jvm global 8
 $ jvm version
 8
-$
+$ java -version #→ --egrep 1\.8
 ```
 
 Test local
@@ -25,7 +25,7 @@ Test local
 $ jvm local 7
 $ jvm version
 7
-$
+$ java -version #→ --egrep 1\.7
 ```
 
 Test POM 8
@@ -35,7 +35,7 @@ $ cd "$ROOT/$TESTS/java8"
 $ jvm reload
 $ jvm version
 8
-$
+$ java -version #→ --egrep 1\.8
 ```
 
 Test POM 7
@@ -45,7 +45,7 @@ $ cd "$ROOT/$TESTS/java7"
 $ jvm reload
 $ jvm version
 7
-$
+$ java -version #→ --egrep 1\.7
 ```
 
 Test POM 7 grep
@@ -55,7 +55,20 @@ $ cd "$ROOT/$TESTS/grep"
 $ jvm reload
 $ jvm version
 7
-$
+$ java -version #→ --egrep 1\.7
+```
+
+Test custom java version
+
+```console
+$ cd "$ROOT/$TESTS/grep"
+$ rm .java-version
+$ echo "6=$(__jvm_javahome 7)" > ~/.jvmconfig
+$ jvm local 6
+$ jvm reload
+$ jvm version
+6
+$ java -version #→ --egrep 1\.7
 ```
 
 Cleanup

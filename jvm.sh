@@ -1,12 +1,11 @@
 #!/bin/sh
-# find the appropriate JAVA_HOME for the given java version and fix PATH.
-__jvm_set() {
+# finds the java home for the given version
+__jvm_javahome() {
   version="$1"
-  previous="$JAVA_HOME"
 
   # custom jdk strategy
   test -f ~/.jvmconfig &&
-    new="$(grep "$version"= ~/.jvmconfig || true | cut -f2 -d'=')"
+    new="$(grep "$version"= ~/.jvmconfig | cut -f2 -d'=')"
 
   # ubuntu/debian jdk strategy
   test -z "$new" -a -d "/usr/lib/jvm/java-${version}-oracle/" &&
@@ -18,6 +17,15 @@ __jvm_set() {
 
   # sanity check: new must be a folder.
   test -n "$new" -a -d "$new" || return 1
+  echo "$new"
+}
+
+# find the appropriate JAVA_HOME for the given java version and fix PATH.
+__jvm_set() {
+  version="$1"
+  previous="$JAVA_HOME"
+
+  new="$(__jvm_javahome "$version")"
 
   # PATH cleanup
   # shellcheck disable=SC2155
