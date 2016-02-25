@@ -22,7 +22,6 @@ Test setting a global version.
 $ jvm global 8
 $ jvm version
 8
-$ java -version #→ --egrep 1\.8
 ```
 
 # jvm local
@@ -33,7 +32,6 @@ Test setting a version to the current folder.
 $ jvm local 7
 $ jvm version
 7
-$ java -version #→ --egrep 1\.7
 ```
 
 # maven.compiler.source
@@ -45,7 +43,6 @@ $ cd "$ROOT/$TESTS/java8"
 $ jvm reload
 $ jvm version
 8
-$ java -version #→ --egrep 1\.8
 ```
 
 # java.version
@@ -57,7 +54,6 @@ $ cd "$ROOT/$TESTS/java7"
 $ jvm reload
 $ jvm version
 7
-$ java -version #→ --egrep 1\.7
 ```
 
 # maven-compiler-plugin
@@ -70,7 +66,6 @@ $ cd "$ROOT/$TESTS/grep"
 $ jvm reload
 $ jvm version
 7
-$ java -version #→ --egrep 1\.7
 ```
 
 # parent pom
@@ -84,7 +79,6 @@ $ cd "$ROOT/$TESTS/empty"
 $ jvm reload
 $ jvm version
 8
-$ java -version #→ --egrep 1\.8
 ```
 
 # jvmconfig
@@ -100,7 +94,6 @@ $ jvm local 6
 $ jvm reload
 $ jvm version
 6
-$ java -version #→ --egrep 1\.7
 ```
 
 # Cleanup
