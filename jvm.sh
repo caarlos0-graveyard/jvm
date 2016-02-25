@@ -49,9 +49,7 @@ __jvm_pomversion_regex() {
 # tries multiple strategies to find the java version, and then sets it in a
 # .java-version
 __jvm_pomversion() {
-  test -f pom.xml || return 1
-  version="$(__jvm_pomversion_regex)"
-  test -z "$version" && version="$(__jvm_pomversion_evaluate)"
+  version="$(__jvm_pomversion_regex || __jvm_pomversion_evaluate)"
   test -n "$version" && echo "$version" > .java-version
 }
 
@@ -69,7 +67,7 @@ __jvm_user_version() {
 
 # finds out which java version should be used.
 __jvm_version() {
-  test ! -f .java-version && __jvm_pomversion
+  test ! -f .java-version -a -f pom.xml && __jvm_pomversion
   __jvm_local_version || __jvm_user_version
 }
 
