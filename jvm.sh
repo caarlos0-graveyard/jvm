@@ -1,12 +1,11 @@
 #!/bin/sh
-# find the appropriate JAVA_HOME for the given java version and fix PATH.
-__jvm_set() {
+# finds the java home for the given version
+__jvm_javahome() {
   version="$1"
-  previous="$JAVA_HOME"
 
   # custom jdk strategy
   test -f ~/.jvmconfig &&
-    new="$(grep "$version"= ~/.jvmconfig || true | cut -f2 -d'=')"
+    new="$(grep "$version"= ~/.jvmconfig | cut -f2 -d'=')"
 
   # ubuntu/debian jdk strategy
   test -z "$new" -a -d "/usr/lib/jvm/java-${version}-oracle/" &&
@@ -18,6 +17,15 @@ __jvm_set() {
 
   # sanity check: new must be a folder.
   test -n "$new" -a -d "$new" || return 1
+  echo "$new"
+}
+
+# find the appropriate JAVA_HOME for the given java version and fix PATH.
+__jvm_set() {
+  version="$1"
+  previous="$JAVA_HOME"
+
+  new="$(__jvm_javahome "$version")"
 
   # PATH cleanup
   # shellcheck disable=SC2155
@@ -40,7 +48,10 @@ __jvm_pomversion_evaluate() {
 
 # tried to find the java version using regex.
 __jvm_pomversion_regex() {
-  grep -Eo '<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>' pom.xml |
+  regex="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
+  version="$(grep -Eo "$regex" pom.xml)"
+  test -z "$version" && return 1
+  echo "$version" |
     cut -f2 -d'>' |
     cut -f2 -d'.' |
     cut -f1 -d'<'
@@ -49,9 +60,7 @@ __jvm_pomversion_regex() {
 # tries multiple strategies to find the java version, and then sets it in a
 # .java-version
 __jvm_pomversion() {
-  test -f pom.xml || return 1
-  version="$(__jvm_pomversion_regex)"
-  test -z "$version" && version="$(__jvm_pomversion_evaluate)"
+  version="$(__jvm_pomversion_regex || __jvm_pomversion_evaluate)"
   test -n "$version" && echo "$version" > .java-version
 }
 
@@ -69,7 +78,7 @@ __jvm_user_version() {
 
 # finds out which java version should be used.
 __jvm_version() {
-  test ! -f .java-version && __jvm_pomversion
+  test ! -f .java-version -a -f pom.xml && __jvm_pomversion
   __jvm_local_version || __jvm_user_version
 }
 

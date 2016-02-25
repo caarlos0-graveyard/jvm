@@ -51,6 +51,10 @@ And, yes, this strategy (based on `jvm config`) can make `jvm` work on Windows
 with any `bash` terminal too. Or any other operating system with a POSIX shell
 really.
 
+You can also read the [self-document tests][tests] to find out more usages.
+
+[tests]: /tests/test.clitest.md
+
 ### Antigen/Antibody
 
 For those using Antigen, Antibody or whatever, just bundle `caarlos0/jvm`, as
