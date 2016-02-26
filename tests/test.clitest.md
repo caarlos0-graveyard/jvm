@@ -12,6 +12,7 @@ $ TESTS="tests"
 $ find . -name '.java-version' -delete
 $ source jvm.sh
 $ export MAVEN_OPTS=""
+$ echo "8=$(__jvm_javahome 7)" > ~/.jvmconfig
 $
 ```
 
@@ -95,7 +96,7 @@ pointing out Java 6 to use Java 7 home.
 
 ```console
 $ cd "$ROOT/$TESTS/grep"
-$ echo "6=$(__jvm_javahome 7)" > ~/.jvmconfig
+$ echo "6=$(__jvm_javahome 7)" >> ~/.jvmconfig
 $ jvm local 6
 $ jvm reload
 $ jvm version
@@ -125,6 +126,7 @@ Remove unneeded files after all tests ran.
 ```console
 $ cd "$ROOT"
 $ find . -name '.java-version' -delete
+$ echo "6=$(__jvm_javahome 7)" > ~/.jvmconfig
 $ jvm global 8
 $
 ```
