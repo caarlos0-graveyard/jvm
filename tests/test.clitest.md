@@ -81,7 +81,7 @@ therefore, this will run `mvn help:evaluate` and find out that the parent
 is using Java 8.
 
 ```console
-$ cd "$ROOT/$TESTS/empty"
+$ cd "$ROOT/$TESTS/java8/empty"
 $ jvm reload
 $ jvm version
 8
