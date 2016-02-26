@@ -96,7 +96,8 @@ __jvm_version() {
   echo "$version"
 }
 
-# called when a proj changes. Find which java version to use and sets it to PATH.
+# called when current pwd changes. Find which java version to use and sets
+# it to PATH.
 __jvm_main() {
   # shellcheck disable=SC2039
   local version
