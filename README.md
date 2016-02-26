@@ -2,8 +2,8 @@
 
 > The _"Java Version Manager"_
 
-Automatically change `JAVA_HOME` based on current directory `.java-version`
-file.
+Automatically change `JAVA_HOME` and `PATH` based on current directory
+`.java-version` or `pom.xml` files.
 
 The philosophy behind this project is to simplify and automate the `JAVA_HOME`
 changing, much like `rbenv` and `rvm` do for Ruby.
@@ -24,11 +24,13 @@ $ echo "source ~/.jvm/jvm.sh" >> ~/.bashrc
 $ echo "source ~/.jvm/jvm.sh" >> ~/.zshrc
 ```
 
-Then, just `cd` to a java project folder. `jvm` will try to extract the version
-using a regular expression. If that fails, `jvm` will then call
-`mvn help:evaluate` asking for the source compiler version, and then, set it to
-`.java-version`. If the `.java-version` file already exists, it will just use
-what's in there.
+Then, just `cd` to a java project folder. `jvm` will look for a `.java-version`
+and use whatever version is inside it. If the file don't exist, but a
+`pom.xml` do, `jvm` will try to extract the version from the `pom.xml` file
+using a regular expression.
+
+`jvm` can also recursively search for `.java-version` and `pom.xml` files, so,
+`cd`-ing to project's subfolder should maintain its version set.
 
 You can always change the current folder java version by doing:
 
@@ -65,3 +67,11 @@ $ antibody bundle caarlos0/jvm
 ```
 
 And it should all work out of the box.
+
+# Honorable mentions
+
+- [@aureliojargas](https://github.com/aureliojargas) for helping review `jvm.sh`
+and for rewrite my test suite with
+[clitest](https://github.com/aureliojargas/clitest);
+- [@velo](https://github.com/velo) for helping me test (on Windows), reporting
+bugs and giving some useful suggestions.

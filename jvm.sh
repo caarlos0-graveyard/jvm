@@ -1,7 +1,11 @@
 #!/bin/sh
+# RegExp used to find the java version in a pom file.
+JVM_REGEX="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
+
 # finds the java home for the given version
 __jvm_javahome() {
-  version="$1"
+  # shellcheck disable=SC2039
+  local version="$1"
 
   # custom jdk strategy
   test -f ~/.jvmconfig &&
@@ -22,9 +26,10 @@ __jvm_javahome() {
 
 # find the appropriate JAVA_HOME for the given java version and fix PATH.
 __jvm_set() {
+  # shellcheck disable=SC2039
+  local version previous new
   version="$1"
   previous="$JAVA_HOME"
-
   new="$(__jvm_javahome "$version")"
 
   # PATH cleanup
@@ -37,60 +42,72 @@ __jvm_set() {
   export PATH="${JAVA_HOME}/bin:$PATH"
 }
 
-# evaluates the 'maven.compiler.source' expression, returning the found java
-# version
-__jvm_pomversion_evaluate() {
-  MAVEN_OPTS="" mvn help:evaluate \
-    -Dexpression='maven.compiler.source' |
-    grep -e '^1\.[4-9]$' |
-    cut -f2 -d'.'
-}
-
 # tried to find the java version using regex.
-__jvm_pomversion_regex() {
-  regex="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
-  version="$(grep -Eo "$regex" pom.xml)"
-  test -z "$version" && return 1
-  echo "$version" |
+__jvm_pomversion() {
+  # shellcheck disable=SC2039
+  local tag pom
+  pom="$1/pom.xml"
+  test ! -s "$pom" && return 1
+  tag="$(grep -Eo "$JVM_REGEX" "$pom")"
+  test -z "$tag" && return 1
+  echo "$tag" |
     cut -f2 -d'>' |
     cut -f2 -d'.' |
     cut -f1 -d'<'
 }
 
-# tries multiple strategies to find the java version, and then sets it in a
-# .java-version
-__jvm_pomversion() {
-  version="$(__jvm_pomversion_regex || __jvm_pomversion_evaluate)"
-  test -n "$version" && echo "$version" > .java-version
-}
-
 # tries to get the version from the local .java-version
 __jvm_local_version() {
-  test -f .java-version || return 1
-  cat .java-version
+  # shellcheck disable=SC2039
+  local file="$1/.java-version"
+  test -s "$file" || return 1
+  cat "$file"
 }
 
 # tries to get the version from the user .java-version
 __jvm_user_version() {
-  test -f ~/.java-version || return 1
+  test -s ~/.java-version || return 1
   cat ~/.java-version
 }
 
 # finds out which java version should be used.
 __jvm_version() {
-  test ! -f .java-version -a -f pom.xml && __jvm_pomversion
-  __jvm_local_version || __jvm_user_version
+  # shellcheck disable=SC2039
+  local version parent proj
+  proj="$1"
+  test -z "$proj" && proj="."
+
+  # try to load from .java-version
+  version="$(__jvm_local_version "$proj")"
+
+  # try to extract from pom.xml
+  test -z "$version" && version="$(__jvm_pomversion "$proj")"
+
+  # go up looking for pom.xmls and .java-versions
+  parent="$proj/.."
+  test -z "$version" &&
+    test -f "$parent/pom.xml" -o -f "$parent/.java-version" &&
+    version="$(__jvm_version "$parent")"
+
+  # if still no version found, use the user defined version
+  test -z "$version" && version="$(__jvm_user_version)"
+
+  echo "$version"
 }
 
-# called when a dir changes. Find which java version to use and sets it to PATH.
+# called when current pwd changes. Find which java version to use and sets
+# it to PATH.
 __jvm_main() {
+  # shellcheck disable=SC2039
+  local version
   version="$(__jvm_version)"
   test -n "$version" && __jvm_set "$version"
 }
 
 # edit custom java version configurations
 __jvm_config() {
-  file="$HOME/.jvmconfig"
+  # shellcheck disable=SC2039
+  local file="$HOME/.jvmconfig"
   test ! -f "$file" && echo "custom-jdk=/path/to/custom/jdk" > "$file"
   $EDITOR "$file"
 }
@@ -120,7 +137,8 @@ EOF
 # utilitary function to user interaction with the jvm configs
 # (and further scripting).
 jvm() {
-  command=""
+  # shellcheck disable=SC2039
+  local command
   if [ "$#" != 0 ]; then
     command="$1"; shift
   fi

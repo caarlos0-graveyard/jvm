@@ -12,6 +12,7 @@ $ TESTS="tests"
 $ find . -name '.java-version' -delete
 $ source jvm.sh
 $ export MAVEN_OPTS=""
+$ echo "8=$(__jvm_javahome 7)" > ~/.jvmconfig
 $
 ```
 
@@ -81,7 +82,7 @@ therefore, this will run `mvn help:evaluate` and find out that the parent
 is using Java 8.
 
 ```console
-$ cd "$ROOT/$TESTS/empty"
+$ cd "$ROOT/$TESTS/java8/empty"
 $ jvm reload
 $ jvm version
 8
@@ -95,12 +96,26 @@ pointing out Java 6 to use Java 7 home.
 
 ```console
 $ cd "$ROOT/$TESTS/grep"
-$ rm .java-version
-$ echo "6=$(__jvm_javahome 7)" > ~/.jvmconfig
+$ echo "6=$(__jvm_javahome 7)" >> ~/.jvmconfig
 $ jvm local 6
 $ jvm reload
 $ jvm version
 6
+$
+```
+
+# nonjava
+
+Test that a folder with a `pom.xml`, but which is not being used to compile
+java projects, will get an empty `.java-version` to avoid running `mvn`
+evaluate every time.
+
+```console
+$ jvm global 7
+$ cd "$ROOT/$TESTS/nonjava"
+$ jvm reload
+$ jvm version
+7
 $
 ```
 
@@ -111,5 +126,7 @@ Remove unneeded files after all tests ran.
 ```console
 $ cd "$ROOT"
 $ find . -name '.java-version' -delete
+$ echo "6=$(__jvm_javahome 7)" > ~/.jvmconfig
+$ jvm global 8 2> /dev/null
 $
 ```
