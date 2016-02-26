@@ -127,6 +127,6 @@ Remove unneeded files after all tests ran.
 $ cd "$ROOT"
 $ find . -name '.java-version' -delete
 $ echo "6=$(__jvm_javahome 7)" > ~/.jvmconfig
-$ jvm global 8 || true
+$ jvm global 8 2> /dev/null
 $
 ```
