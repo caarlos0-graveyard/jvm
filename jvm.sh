@@ -1,4 +1,7 @@
 #!/bin/sh
+# RegExp used to find the java version in a pom file.
+JVM_REGEX="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
+
 # finds the java home for the given version
 __jvm_javahome() {
   local version="$1"
@@ -38,11 +41,12 @@ __jvm_set() {
 
 # tried to find the java version using regex.
 __jvm_pomversion() {
-  local proj="$1"
-  local regex="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
-  local version="$(grep -Eo "$regex" "$proj/pom.xml")"
-  test -z "$version" && return 1
-  echo "$version" |
+  local tag
+  local pom="$1/pom.xml"
+  test ! -s "$pom" && return 1
+  tag="$(grep -Eo "$JVM_REGEX" "$pom")"
+  test -z "$tag" && return 1
+  echo "$tag" |
     cut -f2 -d'>' |
     cut -f2 -d'.' |
     cut -f1 -d'<'
@@ -50,9 +54,9 @@ __jvm_pomversion() {
 
 # tries to get the version from the local .java-version
 __jvm_local_version() {
-  local proj="$1"
-  test -s "$proj/.java-version" || return 1
-  cat "$proj/.java-version"
+  local file="$1/.java-version"
+  test -s "$file" || return 1
+  cat "$file"
 }
 
 # tries to get the version from the user .java-version
@@ -63,18 +67,32 @@ __jvm_user_version() {
 
 # finds out which java version should be used.
 __jvm_version() {
-  local version
+  local version parent
   local proj="$1"
-  test ! -f .java-version -a -f pom.xml && version="$(__jvm_pomversion "$proj")"
-  test -z "$version" && version="$(__jvm_local_version "$proj")"
-  test -z "$version" && test -f "$proj/../pom.xml" -o -f "$proj/../.java-version" && version="$(__jvm_version "$proj/..")"
+  test -z "$proj" && proj="."
+
+  # try to load from .java-version
+  version="$(__jvm_local_version "$proj")"
+
+  # try to extract from pom.xml
+  test -z "$version" &&
+    version="$(__jvm_pomversion "$proj")"
+
+  # if parent pom or .java-version exists, try to find the verion there.
+  parent="$proj/.."
+  test -z "$version" &&
+    test -f "$parent/pom.xml" -o -f "$parent/.java-version" &&
+    version="$(__jvm_version "$parent")"
+
+  # if still no version found, use the user defined version
   test -z "$version" && version="$(__jvm_user_version)"
+
   echo "$version"
 }
 
 # called when a proj changes. Find which java version to use and sets it to PATH.
 __jvm_main() {
-  local version="$(__jvm_version '.')"
+  local version="$(__jvm_version)"
   test -n "$version" && __jvm_set "$version"
 }
 
@@ -126,7 +144,7 @@ jvm() {
       __jvm_main
       ;;
     version)
-      __jvm_version '.'
+      __jvm_version
       ;;
     reload)
       __jvm_main
