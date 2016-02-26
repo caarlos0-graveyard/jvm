@@ -104,6 +104,22 @@ $ jvm version
 $
 ```
 
+# nonjava
+
+Test that a folder with a `pom.xml`, but which is not being used to compile
+java projects, will get an empty `.java-version` to avoid running `mvn`
+evaluate every time.
+
+```console
+$ jvm global 8
+$ cd "$ROOT/$TESTS/nonjava"
+$ jvm reload
+$ jvm version
+8
+$ test -f .java-version
+$
+```
+
 # Cleanup
 
 Remove unneeded files after all tests ran.
@@ -111,5 +127,6 @@ Remove unneeded files after all tests ran.
 ```console
 $ cd "$ROOT"
 $ find . -name '.java-version' -delete
+$ jvm global 8
 $
 ```

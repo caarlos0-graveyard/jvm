@@ -61,18 +61,19 @@ __jvm_pomversion_regex() {
 # .java-version
 __jvm_pomversion() {
   version="$(__jvm_pomversion_regex || __jvm_pomversion_evaluate)"
+  touch .java-version
   test -n "$version" && echo "$version" > .java-version
 }
 
 # tries to get the version from the local .java-version
 __jvm_local_version() {
-  test -f .java-version || return 1
+  test -s .java-version || return 1
   cat .java-version
 }
 
 # tries to get the version from the user .java-version
 __jvm_user_version() {
-  test -f ~/.java-version || return 1
+  test -s ~/.java-version || return 1
   cat ~/.java-version
 }
 
