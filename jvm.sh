@@ -38,8 +38,9 @@ __jvm_set() {
 
 # tried to find the java version using regex.
 __jvm_pomversion() {
+  local proj="$1"
   local regex="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
-  local version="$(grep -Eo "$regex" pom.xml)"
+  local version="$(grep -Eo "$regex" "$proj/pom.xml")"
   test -z "$version" && return 1
   echo "$version" |
     cut -f2 -d'>' |
@@ -49,8 +50,9 @@ __jvm_pomversion() {
 
 # tries to get the version from the local .java-version
 __jvm_local_version() {
-  test -s .java-version || return 1
-  cat .java-version
+  local proj="$1"
+  test -s "$proj/.java-version" || return 1
+  cat "$proj/.java-version"
 }
 
 # tries to get the version from the user .java-version
@@ -62,14 +64,17 @@ __jvm_user_version() {
 # finds out which java version should be used.
 __jvm_version() {
   local version
-  test ! -f .java-version -a -f pom.xml && version="$(__jvm_pomversion)"
-  test -z "$version" && version="$(__jvm_local_version || __jvm_user_version)"
+  local proj="$1"
+  test ! -f .java-version -a -f pom.xml && version="$(__jvm_pomversion "$proj")"
+  test -z "$version" && version="$(__jvm_local_version "$proj")"
+  test -z "$version" && test -f "$proj/../pom.xml" -o -f "$proj/../.java-version" && version="$(__jvm_version "$proj/..")"
+  test -z "$version" && version="$(__jvm_user_version)"
   echo "$version"
 }
 
-# called when a dir changes. Find which java version to use and sets it to PATH.
+# called when a proj changes. Find which java version to use and sets it to PATH.
 __jvm_main() {
-  local version="$(__jvm_version)"
+  local version="$(__jvm_version '.')"
   test -n "$version" && __jvm_set "$version"
 }
 
@@ -121,7 +126,7 @@ jvm() {
       __jvm_main
       ;;
     version)
-      __jvm_version
+      __jvm_version '.'
       ;;
     reload)
       __jvm_main

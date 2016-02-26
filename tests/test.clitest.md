@@ -95,7 +95,6 @@ pointing out Java 6 to use Java 7 home.
 
 ```console
 $ cd "$ROOT/$TESTS/grep"
-$ rm .java-version
 $ echo "6=$(__jvm_javahome 7)" > ~/.jvmconfig
 $ jvm local 6
 $ jvm reload
@@ -116,7 +115,6 @@ $ cd "$ROOT/$TESTS/nonjava"
 $ jvm reload
 $ jvm version
 8
-$ test -f .java-version
 $
 ```
 
