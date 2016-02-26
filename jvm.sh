@@ -39,6 +39,7 @@ __jvm_set() {
 
 # evaluates the 'maven.compiler.source' expression, returning the found java
 # version
+# XXX this is slow as fuck, get rid of this!
 __jvm_pomversion_evaluate() {
   MAVEN_OPTS="" mvn help:evaluate \
     -Dexpression='maven.compiler.source' |
