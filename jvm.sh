@@ -37,16 +37,6 @@ __jvm_set() {
   export PATH="${JAVA_HOME}/bin:$PATH"
 }
 
-# evaluates the 'maven.compiler.source' expression, returning the found java
-# version
-# XXX this is slow as fuck, get rid of this!
-__jvm_pomversion_evaluate() {
-  MAVEN_OPTS="" mvn help:evaluate \
-    -Dexpression='maven.compiler.source' |
-    grep -e '^1\.[4-9]$' |
-    cut -f2 -d'.'
-}
-
 # tried to find the java version using regex.
 __jvm_pomversion_regex() {
   regex="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
@@ -61,7 +51,7 @@ __jvm_pomversion_regex() {
 # tries multiple strategies to find the java version, and then sets it in a
 # .java-version
 __jvm_pomversion() {
-  version="$(__jvm_pomversion_regex || __jvm_pomversion_evaluate)"
+  version="$(__jvm_pomversion_regex)"
   touch .java-version
   test -n "$version" && echo "$version" > .java-version
 }
