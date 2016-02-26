@@ -81,10 +81,9 @@ __jvm_version() {
   version="$(__jvm_local_version "$proj")"
 
   # try to extract from pom.xml
-  test -z "$version" &&
-    version="$(__jvm_pomversion "$proj")"
+  test -z "$version" && version="$(__jvm_pomversion "$proj")"
 
-  # if parent pom or .java-version exists, try to find the verion there.
+  # go up looking for pom.xmls and .java-versions
   parent="$proj/.."
   test -z "$version" &&
     test -f "$parent/pom.xml" -o -f "$parent/.java-version" &&
