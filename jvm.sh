@@ -4,6 +4,7 @@ JVM_REGEX="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
 
 # finds the java home for the given version
 __jvm_javahome() {
+  # shellcheck disable=SC2039
   local version="$1"
 
   # custom jdk strategy
@@ -25,9 +26,11 @@ __jvm_javahome() {
 
 # find the appropriate JAVA_HOME for the given java version and fix PATH.
 __jvm_set() {
-  local version="$1"
-  local previous="$JAVA_HOME"
-  local new="$(__jvm_javahome "$version")"
+  # shellcheck disable=SC2039
+  local version previous new
+  version="$1"
+  previous="$JAVA_HOME"
+  new="$(__jvm_javahome "$version")"
 
   # PATH cleanup
   # shellcheck disable=SC2155
@@ -41,8 +44,9 @@ __jvm_set() {
 
 # tried to find the java version using regex.
 __jvm_pomversion() {
-  local tag
-  local pom="$1/pom.xml"
+  # shellcheck disable=SC2039
+  local tag pom
+  pom="$1/pom.xml"
   test ! -s "$pom" && return 1
   tag="$(grep -Eo "$JVM_REGEX" "$pom")"
   test -z "$tag" && return 1
@@ -54,6 +58,7 @@ __jvm_pomversion() {
 
 # tries to get the version from the local .java-version
 __jvm_local_version() {
+  # shellcheck disable=SC2039
   local file="$1/.java-version"
   test -s "$file" || return 1
   cat "$file"
@@ -67,8 +72,9 @@ __jvm_user_version() {
 
 # finds out which java version should be used.
 __jvm_version() {
-  local version parent
-  local proj="$1"
+  # shellcheck disable=SC2039
+  local version parent proj
+  proj="$1"
   test -z "$proj" && proj="."
 
   # try to load from .java-version
@@ -92,12 +98,15 @@ __jvm_version() {
 
 # called when a proj changes. Find which java version to use and sets it to PATH.
 __jvm_main() {
-  local version="$(__jvm_version)"
+  # shellcheck disable=SC2039
+  local version
+  version="$(__jvm_version)"
   test -n "$version" && __jvm_set "$version"
 }
 
 # edit custom java version configurations
 __jvm_config() {
+  # shellcheck disable=SC2039
   local file="$HOME/.jvmconfig"
   test ! -f "$file" && echo "custom-jdk=/path/to/custom/jdk" > "$file"
   $EDITOR "$file"
@@ -128,6 +137,7 @@ EOF
 # utilitary function to user interaction with the jvm configs
 # (and further scripting).
 jvm() {
+  # shellcheck disable=SC2039
   local command
   if [ "$#" != 0 ]; then
     command="$1"; shift
