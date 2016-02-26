@@ -111,11 +111,11 @@ java projects, will get an empty `.java-version` to avoid running `mvn`
 evaluate every time.
 
 ```console
-$ jvm global 8
+$ jvm global 7
 $ cd "$ROOT/$TESTS/nonjava"
 $ jvm reload
 $ jvm version
-8
+7
 $
 ```
 
@@ -127,6 +127,6 @@ Remove unneeded files after all tests ran.
 $ cd "$ROOT"
 $ find . -name '.java-version' -delete
 $ echo "6=$(__jvm_javahome 7)" > ~/.jvmconfig
-$ jvm global 8
+$ jvm global 8 || true
 $
 ```
