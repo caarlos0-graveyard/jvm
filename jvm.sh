@@ -1,7 +1,7 @@
 #!/bin/sh
 # finds the java home for the given version
 __jvm_javahome() {
-  version="$1"
+  local version="$1"
 
   # custom jdk strategy
   test -f ~/.jvmconfig &&
@@ -22,10 +22,9 @@ __jvm_javahome() {
 
 # find the appropriate JAVA_HOME for the given java version and fix PATH.
 __jvm_set() {
-  version="$1"
-  previous="$JAVA_HOME"
-
-  new="$(__jvm_javahome "$version")"
+  local version="$1"
+  local previous="$JAVA_HOME"
+  local new="$(__jvm_javahome "$version")"
 
   # PATH cleanup
   # shellcheck disable=SC2155
@@ -38,22 +37,14 @@ __jvm_set() {
 }
 
 # tried to find the java version using regex.
-__jvm_pomversion_regex() {
-  regex="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
-  version="$(grep -Eo "$regex" pom.xml)"
+__jvm_pomversion() {
+  local regex="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
+  local version="$(grep -Eo "$regex" pom.xml)"
   test -z "$version" && return 1
   echo "$version" |
     cut -f2 -d'>' |
     cut -f2 -d'.' |
     cut -f1 -d'<'
-}
-
-# tries multiple strategies to find the java version, and then sets it in a
-# .java-version
-__jvm_pomversion() {
-  version="$(__jvm_pomversion_regex)"
-  touch .java-version
-  test -n "$version" && echo "$version" > .java-version
 }
 
 # tries to get the version from the local .java-version
@@ -70,19 +61,21 @@ __jvm_user_version() {
 
 # finds out which java version should be used.
 __jvm_version() {
-  test ! -f .java-version -a -f pom.xml && __jvm_pomversion
-  __jvm_local_version || __jvm_user_version
+  local version
+  test ! -f .java-version -a -f pom.xml && version="$(__jvm_pomversion)"
+  test -z "$version" && version="$(__jvm_local_version || __jvm_user_version)"
+  echo "$version"
 }
 
 # called when a dir changes. Find which java version to use and sets it to PATH.
 __jvm_main() {
-  version="$(__jvm_version)"
+  local version="$(__jvm_version)"
   test -n "$version" && __jvm_set "$version"
 }
 
 # edit custom java version configurations
 __jvm_config() {
-  file="$HOME/.jvmconfig"
+  local file="$HOME/.jvmconfig"
   test ! -f "$file" && echo "custom-jdk=/path/to/custom/jdk" > "$file"
   $EDITOR "$file"
 }
@@ -112,7 +105,7 @@ EOF
 # utilitary function to user interaction with the jvm configs
 # (and further scripting).
 jvm() {
-  command=""
+  local command
   if [ "$#" != 0 ]; then
     command="$1"; shift
   fi
