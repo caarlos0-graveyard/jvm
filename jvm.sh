@@ -154,7 +154,7 @@ jvm() {
 # main function called when sourced.
 main() {
   if [ -n "$BASH"  ]; then
-    PROMPT_COMMAND=__jvm_main
+    PROMPT_COMMAND="__jvm_main; $PROMPT_COMMAND"
     # shellcheck disable=SC2039
     complete -W "local global version reload config" jvm
   elif [ -n "$ZSH_NAME" ]; then
