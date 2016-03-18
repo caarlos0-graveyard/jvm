@@ -89,6 +89,45 @@ $ jvm version
 $
 ```
 
+# simple build.gradle
+
+Test a simple `build.gradle` with only one source/target Compatibility property
+set.
+
+```console
+$ cd "$ROOT/$TESTS/gradle"
+$ jvm reload
+$ jvm version
+7
+$
+```
+
+# complex build.gradle
+
+Test a simple `build.gradle` with both source and target compatibility property
+set.
+
+```console
+$ cd "$ROOT/$TESTS/complex-gradle"
+$ jvm reload
+$ jvm version
+7
+$
+```
+
+# parent build.gradle
+
+When the build.gradle in the current folder don't define the java version,
+look for files in the parent folder.
+
+```console
+$ cd "$ROOT/$TESTS/complex-gradle/sub"
+$ jvm reload
+$ jvm version
+7
+$
+```
+
 # jvmconfig
 
 Test that `jvm` respects a custom java version in `~/.jvmconfig`, in this case,

@@ -3,7 +3,7 @@
 > The _"Java Version Manager"_
 
 Automatically change `JAVA_HOME` and `PATH` based on current directory
-`.java-version` or `pom.xml` files.
+`.java-version`, `pom.xml` and `build.gradle` files.
 
 The philosophy behind this project is to simplify and automate the `JAVA_HOME`
 changing, much like `rbenv` and `rvm` do for Ruby.
@@ -27,10 +27,12 @@ $ echo "source ~/.jvm/jvm.sh" >> ~/.zshrc
 Then, just `cd` to a java project folder. `jvm` will look for a `.java-version`
 and use whatever version is inside it. If the file don't exist, but a
 `pom.xml` do, `jvm` will try to extract the version from the `pom.xml` file
-using a regular expression.
+using a regular expression. If no `pom.xml` is found, it will look for the
+`build.gradle` file and do the same strategy to extract the java version.
 
-`jvm` can also recursively search for `.java-version` and `pom.xml` files, so,
-`cd`-ing to project's subfolder should maintain its version set.
+`jvm` can also recursively search for `.java-version`, `pom.xml` and
+`build.gradle` files, so, `cd`-ing to project's subfolder should maintain
+its version set.
 
 You can always change the current folder java version by doing:
 
@@ -46,6 +48,13 @@ example, you can run `jvm config` and add a line like this:
 ```properties
 6-openjdk=/path/to/openjdk/6
 ```
+
+or even:
+
+```properties
+6=/path/to/openjdk/6
+```
+
 
 And `jvm` will automagically works.
 

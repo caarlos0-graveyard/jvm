@@ -1,6 +1,8 @@
 #!/bin/sh
 # RegExp used to find the java version in a pom file.
-JVM_REGEX="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
+POM_REGEX="<(java.version|maven.compiler.source|source)>1\.[4-9]</.*>"
+# RegExp used to find the java version in a build.gradle file.
+GRADLE_REGEX="(sourceCompatibility|targetCompatibility) ?= ?1\.[4-9]"
 
 # finds the java home for the given version
 __jvm_javahome() {
@@ -42,18 +44,31 @@ __jvm_set() {
   export PATH="${JAVA_HOME}/bin:$PATH"
 }
 
-# tried to find the java version using regex.
+# tries to find the java version using regex inside a pom.xml file.
 __jvm_pomversion() {
   # shellcheck disable=SC2039
-  local tag pom
-  pom="$1/pom.xml"
+  local proj tag pom
+  proj="$1"
+  pom="$proj/pom.xml"
   test ! -s "$pom" && return 1
-  tag="$(grep -Eo "$JVM_REGEX" "$pom")"
+  tag="$(grep -Eo "$POM_REGEX" "$pom")"
   test -z "$tag" && return 1
   echo "$tag" |
     cut -f2 -d'>' |
     cut -f2 -d'.' |
     cut -f1 -d'<'
+}
+
+# tries to find the java version using regex inside a build.gradle file.
+__jvm_gradleversion() {
+  # shellcheck disable=SC2039
+  local proj property build
+  proj="$1"
+  build="$proj/build.gradle"
+  test ! -s "$build" && return 1
+  property="$(grep -Eo "$GRADLE_REGEX" "$build" | head -n1)"
+  test -z "$property" && return 1
+  echo "$property" | tr -d ' ' | cut -f2 -d '=' | cut -f2 -d'.'
 }
 
 # tries to get the version from the local .java-version
@@ -82,6 +97,9 @@ __jvm_version() {
 
   # try to extract from pom.xml
   test -z "$version" && version="$(__jvm_pomversion "$proj")"
+
+  # try to extrat from build.gradle
+  test -z "$version" && version="$(__jvm_gradleversion "$proj")"
 
   # go up looking for pom.xmls and .java-versions
   parent="$proj/.."
