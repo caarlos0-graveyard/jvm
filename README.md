@@ -1,4 +1,4 @@
-# jvm [![Build Status](https://travis-ci.org/caarlos0/jvm.svg?branch=master)](https://travis-ci.org/caarlos0/jvm)
+# jvm [![License](https://img.shields.io/github/license/caarlos0/jvm.svg?style=flat-square)](/LICENSE.md) [![Build Status](https://img.shields.io/travis/caarlos0/jvm/master.svg?style=flat-square)](https://circleci.com/gh/caarlos0/jvm)
 
 > The _"Java Version Manager"_
 
