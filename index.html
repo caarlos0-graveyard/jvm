@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="UTF-8">
+    <title>Java Version Manager by caarlos0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
+  </head>
+  <body>
+    <section class="page-header">
+      <h1 class="project-name">Java Version Manager</h1>
+      <h2 class="project-tagline">Never manually change your JAVA_HOME again </h2>
+      <a href="https://github.com/caarlos0/jvm" class="btn">View on GitHub</a>
+      <a href="https://github.com/caarlos0/jvm/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/caarlos0/jvm/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
+
+    <section class="main-content">
+      <h1>
+<a id="jvm--" class="anchor" href="#jvm--" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>jvm <a href="/LICENSE.md"><img src="https://img.shields.io/github/license/caarlos0/jvm.svg?style=flat-square" alt="License"></a> <a href="https://circleci.com/gh/caarlos0/jvm"><img src="https://img.shields.io/travis/caarlos0/jvm/master.svg?style=flat-square" alt="Build Status"></a>
+</h1>
+
+<blockquote>
+<p>The <em>"Java Version Manager"</em></p>
+</blockquote>
+
+<p>Automatically change <code>JAVA_HOME</code> and <code>PATH</code> based on current directory
+<code>.java-version</code>, <code>pom.xml</code> and <code>build.gradle</code> files.</p>
+
+<p>The philosophy behind this project is to simplify and automate the <code>JAVA_HOME</code>
+changing, much like <code>rbenv</code> and <code>rvm</code> do for Ruby.</p>
+
+<p>It's pretty common to have to work in Java 6, 7 and 8 projects, and changing
+<code>PATH</code>s and <code>JAVA_HOME</code>s by hand is a very repetitive task.</p>
+
+<h3>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h3>
+
+<div class="highlight highlight-text-shell-session"><pre>$ <span class="pl-s1">git clone https://github.com/caarlos0/jvm.git <span class="pl-k">~</span>/.jvm</span>
+$ <span class="pl-s1"><span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>.java-version<span class="pl-pds">"</span></span> <span class="pl-k">&gt;&gt;</span> <span class="pl-k">~</span>/.gitignore</span>
+
+# <span class="pl-s1"><span class="pl-k">for</span> bash</span>
+$ <span class="pl-s1"><span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>source ~/.jvm/jvm.sh<span class="pl-pds">"</span></span> <span class="pl-k">&gt;&gt;</span> <span class="pl-k">~</span>/.bashrc</span>
+
+# <span class="pl-s1"><span class="pl-k">for</span> zsh</span>
+$ <span class="pl-s1"><span class="pl-c1">echo</span> <span class="pl-s"><span class="pl-pds">"</span>source ~/.jvm/jvm.sh<span class="pl-pds">"</span></span> <span class="pl-k">&gt;&gt;</span> <span class="pl-k">~</span>/.zshrc</span></pre></div>
+
+<p>Then, just <code>cd</code> to a java project folder. <code>jvm</code> will look for a <code>.java-version</code>
+and use whatever version is inside it. If the file don't exist, but a
+<code>pom.xml</code> do, <code>jvm</code> will try to extract the version from the <code>pom.xml</code> file
+using a regular expression. If no <code>pom.xml</code> is found, it will look for the
+<code>build.gradle</code> file and do the same strategy to extract the java version.</p>
+
+<p><code>jvm</code> can also recursively search for <code>.java-version</code>, <code>pom.xml</code> and
+<code>build.gradle</code> files, so, <code>cd</code>-ing to project's subfolder should maintain
+its version set.</p>
+
+<p>You can always change the current folder java version by doing:</p>
+
+<div class="highlight highlight-text-shell-session"><pre>$ <span class="pl-s1">jvm <span class="pl-k">local</span> 7</span></pre></div>
+
+<p>On OSX, <code>jvm</code> will use the <code>java_home</code> tool to find the available versions. For
+Ubuntu, right now <code>jvm</code> has <code>/usr/lib/jvm/java-${version}-oracle/</code> hard coded.
+This might change soon. If you need custom versions, like <code>6-openjdk</code>, for
+example, you can run <code>jvm config</code> and add a line like this:</p>
+
+<div class="highlight highlight-source-ini"><pre><span class="pl-k">6-openjdk</span>=/path/to/openjdk/6</pre></div>
+
+<p>or even:</p>
+
+<div class="highlight highlight-source-ini"><pre><span class="pl-k">6</span>=/path/to/openjdk/6</pre></div>
+
+<p>And <code>jvm</code> will automagically works.</p>
+
+<p>And, yes, this strategy (based on <code>jvm config</code>) can make <code>jvm</code> work on Windows
+with any <code>bash</code> terminal too. Or any other operating system with a POSIX shell
+really.</p>
+
+<p>You can also read the <a href="/tests/test.clitest.md">self-document tests</a> to find out more usages.</p>
+
+<h3>
+<a id="antigenantibody" class="anchor" href="#antigenantibody" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Antigen/Antibody</h3>
+
+<p>For those using Antigen, Antibody or whatever, just bundle <code>caarlos0/jvm</code>, as
+in:</p>
+
+<div class="highlight highlight-text-shell-session"><pre>$ <span class="pl-s1">antibody bundle caarlos0/jvm</span></pre></div>
+
+<p>And it should all work out of the box.</p>
+
+<h1>
+<a id="honorable-mentions" class="anchor" href="#honorable-mentions" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Honorable mentions</h1>
+
+<ul>
+<li>
+<a href="https://github.com/aureliojargas">@aureliojargas</a> for helping review <code>jvm.sh</code>
+and for rewrite my test suite with
+<a href="https://github.com/aureliojargas/clitest">clitest</a>;</li>
+<li>
+<a href="https://github.com/velo">@velo</a> for helping me test (on Windows), reporting
+bugs and giving some useful suggestions.</li>
+</ul>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/caarlos0/jvm">Java Version Manager</a> is maintained by <a href="https://github.com/caarlos0">caarlos0</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+      </footer>
+
+    </section>
+
+  
+  </body>
+</html>
