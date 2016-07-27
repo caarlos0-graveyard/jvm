@@ -200,6 +200,7 @@ main() {
     # shellcheck disable=SC2039
     compctl -k "(local global version reload config)" jvm
   fi
+  __jvm_main
 }
 
 main
