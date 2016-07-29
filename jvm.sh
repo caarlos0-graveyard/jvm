@@ -203,4 +203,4 @@ main() {
   __jvm_main
 }
 
-main
+main || true
