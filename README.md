@@ -1,4 +1,4 @@
-# jvm [![License](https://img.shields.io/github/license/caarlos0/jvm.svg?style=flat-square)](/LICENSE.md) [![Build Status](https://img.shields.io/travis/caarlos0/jvm/master.svg?style=flat-square)](https://circleci.com/gh/caarlos0/jvm)
+# jvm [![License](https://img.shields.io/github/license/caarlos0/jvm.svg?style=flat-square)](/LICENSE.md) [![Build Status](https://img.shields.io/travis/caarlos0/jvm/master.svg?style=flat-square)](https://circleci.com/gh/caarlos0/jvm) [![SayThanks.io](https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg?style=flat-square)](https://saythanks.io/to/caarlos0)
 
 > The _"Java Version Manager"_
 
