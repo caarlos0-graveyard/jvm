@@ -1,4 +1,4 @@
-# jvm [![License](https://img.shields.io/github/license/caarlos0/jvm.svg?style=flat-square)](/LICENSE.md) [![Build Status](https://img.shields.io/travis/caarlos0/jvm/master.svg?style=flat-square)](https://circleci.com/gh/caarlos0/jvm) [![SayThanks.io](https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg?style=flat-square)](https://saythanks.io/to/caarlos0)
+# jvm
 
 > The _"Java Version Manager"_
 
@@ -10,6 +10,10 @@ changing, much like `rbenv` and `rvm` do for Ruby.
 
 It's pretty common to have to work in Java 6, 7 and 8 projects, and changing
 `PATH`s and `JAVA_HOME`s by hand is a very repetitive task.
+
+[![License](https://img.shields.io/github/license/caarlos0/jvm.svg?style=flat-square)](/LICENSE.md)
+[![Build Status](https://img.shields.io/travis/caarlos0/jvm.svg?style=flat-square)](https://travis-ci.org/caarlos0/jvm)
+[![SayThanks.io](https://img.shields.io/badge/SayThanks.io-%E2%98%BC-1EAEDB.svg?style=flat-square)](https://saythanks.io/to/caarlos0)
 
 ### Usage
 
