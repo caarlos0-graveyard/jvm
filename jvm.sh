@@ -18,8 +18,10 @@ __jvm_javahome() {
 		new="/usr/lib/jvm/java-${version}-oracle/"
 
 	# osx jdk strategy
+	osx_version="$version"
+	test "$version" -le 8 && osx_version="1.$version"
 	test -z "$new" -a -e /usr/libexec/java_home &&
-		new="$(/usr/libexec/java_home -v 1."$version" || true)"
+		new="$(/usr/libexec/java_home -v "$osx_version" || true)"
 
 	# sanity check: new must be a folder.
 	test -n "$new" -a -d "$new" || return 1
